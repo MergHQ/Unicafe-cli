@@ -6,7 +6,7 @@ import (
 )
 
 type RestaurantResponse struct {
-	Data []domain.Restaurant `json:"data,omitempty"`
+	Data []domain.RestaurantInfoShort `json:"data,omitempty"`
 	Status string `json:"status,omitempty"`
 }
 
@@ -23,7 +23,7 @@ func NewRestaurantService() *RestaurantService {
 	}
 }
 
-func (rs* RestaurantService) GetRestaurants() []domain.Restaurant {
+func (rs* RestaurantService) GetRestaurants() []domain.RestaurantInfoShort {
 	response := new(RestaurantResponse)
 	_, err := rs.sling.New().Get("https://messi.hyyravintolat.fi/publicapi/restaurants").Receive(response, nil)
 	if err != nil {

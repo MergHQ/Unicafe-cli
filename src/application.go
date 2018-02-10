@@ -37,9 +37,13 @@ func main() {
 
 func PostTodaysMenu(restaurant int) {
 	menuService := service.NewMenuService()
-	menu := menuService.GetTodaysMenuForRestaurant(restaurant)
+	restaurantInformation, menu := menuService.GetTodaysMenuForRestaurant(restaurant)
+	println(restaurantInformation.Name)
+	println(restaurantInformation.Address)
+	print("\n\n\n")
 	for i := 0; i < len(menu.Data); i++ {
-		println(menu.Data[i].Name)
+		str := fmt.Sprintf("%s | Student price: %s", menu.Data[i].Name, menu.Data[i].Price.Value.Student)
+		println(str)
 	}
 }
 

@@ -11,6 +11,7 @@ import (
 
 type MenuResponse struct {
 	Data []domain.Menu `json:"data,omitempty"`
+	Information domain.RestaurantInfoLong
 	Status string `json:"status,omitempty"`
 }
 /*
@@ -26,7 +27,7 @@ func NewMenuService() *MenuService {
 	}
 }
 
-func (ms* MenuService) GetTodaysMenuForRestaurant(restaurant int) domain.Menu {
+func (ms* MenuService) GetTodaysMenuForRestaurant(restaurant int) (domain.RestaurantInfoLong, domain.Menu) {
 	response := new(MenuResponse)
 	path := fmt.Sprintf("https://messi.hyyravintolat.fi/publicapi/restaurant/%s", strconv.Itoa(restaurant))
 	_, err := ms.sling.New().Get(path).Receive(response, nil)
@@ -37,8 +38,8 @@ func (ms* MenuService) GetTodaysMenuForRestaurant(restaurant int) domain.Menu {
 	for i := 0; i < len(response.Data); i++ {
 		splitDate := strings.Split(response.Data[i].Date, " ");
 		if time.Now().Format("02.01") == splitDate[1] {
-			return response.Data[i];
+			return response.Information, response.Data[i];
 		}
 	}
-	return domain.Menu{} 
+	return response.Information, domain.Menu{} 
 }
