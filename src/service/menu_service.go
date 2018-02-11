@@ -43,3 +43,20 @@ func (ms* MenuService) GetTodaysMenuForRestaurant(restaurant int) (domain.Restau
 	}
 	return response.Information, domain.Menu{} 
 }
+
+func (ms* MenuService) GetMenuForRestaurant(date string, restaurant int) (domain.RestaurantInfoLong, domain.Menu) {
+	response := new(MenuResponse)
+	path := fmt.Sprintf("https://messi.hyyravintolat.fi/publicapi/restaurant/%s", strconv.Itoa(restaurant))
+	_, err := ms.sling.New().Get(path).Receive(response, nil)
+	if err != nil {
+		panic(err)
+	}
+	
+	for i := 0; i < len(response.Data); i++ {
+		splitDate := strings.Split(response.Data[i].Date, " ");
+		if date == splitDate[1] {
+			return response.Information, response.Data[i];
+		}
+	}
+	return response.Information, domain.Menu{} 
+}
